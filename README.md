@@ -1,9 +1,9 @@
 # xkcd_bot #
-___
+---
 Sends daily fresh pictures from the comic [xkcd](https://xkcd.com /) in the telegram channel.
 
 ## Installation ##
----
+___
 ### Environment
 
 Python 3 should already be installed.
@@ -44,11 +44,11 @@ Example of the `.env` file:
 >```
 
 ## Usage
----
+___
 Running the script `xkcd_bot.py `
 
 If there are problems with the site [xkcd](https://xkcd.com) the script will return an exception and stop working. After restoring the site, run the script again
 
 ## The purpose of the project
----
+___
 The code was written for educational purposes in an online course for web developers [dvmn.org](https://dvmn.org/).

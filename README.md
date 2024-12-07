@@ -1,6 +1,6 @@
 # xkcd_bot #
 
-Sends daily fresh pictures from the comic [xkcd](https://xkcd.com /) in the telegram channel.
+Sends daily fresh pictures from the comic [xkcd](https://xkcd.com) in the telegram channel.
 
 ## Installation
 
@@ -8,7 +8,7 @@ Sends daily fresh pictures from the comic [xkcd](https://xkcd.com /) in the tele
 
 Python 3 should already be installed.
 For the script to work correctly, I recommend using all the dependencies from the file `requirements.txt `
-It is better to launch using the virtual environment `venv'.
+It is better to launch using the virtual environment `venv`.
 
 To create a `venv` and use the script, follow these steps:
 

@@ -54,6 +54,7 @@ def main():
 
     path = Path('temp_files')
     path.mkdir(parents=True, exist_ok=True)
+
     try:
         bot = telegram.Bot(token=tg_token)
         updates = bot.get_updates()
@@ -70,7 +71,6 @@ def main():
         bot.send_message(chat_id=tg_channel_name, text=f'{image_coment}')
     finally:
         shutil.rmtree(path)
-        print(f'Изображение "{image_title}" отправлено в тг-канал {tg_channel_name}\nВременные файлы удалены')
 
 
 if __name__ == '__main__':

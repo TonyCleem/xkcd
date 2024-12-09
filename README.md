@@ -1,54 +1,65 @@
 # xkcd_bot #
 
-Sends daily fresh pictures from the comic [xkcd](https://xkcd.com) in the telegram channel.
+Отправляет случайные изображения из комикса [xkcd](https://xkcd.com) в telegram-канал.
 
-## Installation
+## Установка
 
-### Environment
+### Окружение
 
-Python 3 should already be installed.
-For the script to work correctly, I recommend using all the dependencies from the file `requirements.txt `
-It is better to launch using the virtual environment `venv`.
+Python 3 уже должен быть установлен.
+Для корректной работы скрипта рекомендую использовать все зависимости из файла `requirements.txt`
+Лучше запускать с использованием виртуальной среды `venv`.
 
-To create a `venv` and use the script, follow these steps:
+Чтобы создать `venv` и использовать скрипт, выполните следующие действия:
 
-
-Creating a virtual environment
+Создание виртуальной среды
 ```
-python -m venv <name venv>
+python -m venv <имя venv>
 ```
 
-Activate:
+Активация:
 ```
 <name venv>\Scripts\activate
 ```
 
-Installing all dependencies from `requirements.txt `
+Установка всех зависимостей из `requirements.txt `
 ```
 pip install -r requirements.txt
 ```
-Deactivate the script at the end of the work
+Деактивация:
 ```
 deactivate
 ```
+### Telegram-бот
+- Создание бота с помощью [BotFather](https://way23.ru/%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B1%D0%BE%D1%82%D0%B0-%D0%B2-telegram.html)
+- Получение [токена](https://smmplanner.com/blog/otlozhennyj-posting-v-telegram/#02:~:text=%D0%B1%D0%BE%D1%82%D0%B0%2C%20%D0%B0%20%D1%82%D0%B0%D0%BA%D0%B6%D0%B5-,%D1%82%D0%BE%D0%BA%D0%B5%D0%BD,-%D0%B4%D0%BB%D1%8F%20HTTP%20API)
 
-### Telegram bot
-- Creating a bot via [BotFather](https://way23.ru/%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B1%D0%BE%D1%82%D0%B0-%D0%B2-telegram.html)
-- Get the [token](https://smmplanner.com/blog/otlozhennyj-posting-v-telegram/#02:~:text=%D0%B1%D0%BE%D1%82%D0%B0%2C%20%D0%B0%20%D1%82%D0%B0%D0%BA%D0%B6%D0%B5-,%D1%82%D0%BE%D0%BA%D0%B5%D0%BD,-%D0%B4%D0%BB%D1%8F%20HTTP%20API)
+Укажите токен, а также имя Вашего телеграм-канала в переменных файла `.env`.
 
-Specify the received token in the variables of the `.env` file.
-
-Example of the `.env` file:
+Пример файла `.env`:
 >```
->TELEGRAM_TOKEN=<token from your bot>
+>TELEGRAM_TOKEN=<ваш токен бота>
+>TG_CHANNEL_NAME=<имя вашего канала>
 >```
 
-## Usage
+## Использование
 
-Running the script `xkcd_bot.py `
+Запуск скрипта `xkcd_bot.py `:
 
-If there are problems with the site [xkcd](https://xkcd.com) the script will return an exception and stop working. After restoring the site, run the script again
+```cmd
+py xkcd_bot.py
+```
+Скрипт выполнит следующие действия:
+- Скачает случайное изображение во временный каталог `temp_files`
+- Запостит изображение из каталога в телеграм-канал
+- Удалит временный каталог со всеми файлами
 
-## The purpose of the project
+После окончания работы скрипта Вы получите сообщение:
+```cmd
+>Изображение <имя изображения> отправлено в тг-канал <@имя телеграм-канала>
+>Временные файлы удалены
+```
 
-The code was written for educational purposes in an online course for web developers [dvmn.org](https://dvmn.org/).
+## Цель проекта
+
+Код был написан в образовательных целях в рамках онлайн-курса для веб-разработчиков [dvmn.org](https://dvmn.org/).

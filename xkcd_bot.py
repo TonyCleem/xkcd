@@ -1,47 +1,36 @@
 import requests
 import telegram
 import os
-import time
+import random
+import shutil
 from pathlib import Path
 from dotenv import load_dotenv
 
 
-def get_link_from_url(url_xkcd):
-    response = requests.get(url_xkcd)
+def get_image_from_xkcd(xkcd_url):
+    response = requests.get(xkcd_url)
     response.raise_for_status()
     comics = response.json()
-    link_image = comics['img']
-    return link_image
+    image_link = comics['img']
+    image_title = comics['title']
+    image_coment = comics['alt']
+    image_num = comics['num']
+    image = image_link, image_title, image_coment, image_num
+    return image
 
 
-def get_coment_image(url_xkcd):
-    response = requests.get(url_xkcd)
+def download_image(path, image_link, image_title):
+    response = requests.get(image_link)
     response.raise_for_status()
-    comics = response.json()
-    get_coment_image = comics['alt']
-    return get_coment_image
-
-
-def get_title_image(url_xkcd):
-    response = requests.get(url_xkcd)
-    response.raise_for_status()
-    comics = response.json()
-    title_image = comics['title']
-    return title_image
-
-
-def download_image(path, link_image, title_image):
-    response = requests.get(link_image)
-    response.raise_for_status()
-    file_path = get_file_path(path, title_image)
+    file_path = get_file_path(path, image_title)
     with open(file_path, 'wb') as file:
         file.write(response.content)
 
 
-def send_image_with_tg_bot(path, title_image, bot, name_tg_channel):
-        file_path = get_file_path(path, title_image)
+def send_image_with_tg_bot(path, image_title, bot, tg_channel_name):
+        file_path = get_file_path(path, image_title)
         with open(file_path, 'rb') as document:
-            bot.send_document(name_tg_channel, document)
+            bot.send_document(tg_channel_name, document)
 
 
 def get_images_of_directory(file_path):
@@ -51,39 +40,38 @@ def get_images_of_directory(file_path):
         return image
 
 
-def get_file_path(path, title_image):
-    file_name = f'{title_image}.jpg'
-    file_path = path / file_name
+def get_file_path(path, image_title):
+    file_name = f'{image_title}.jpg'
+    file_path = Path(path, file_name)
     return file_path
 
 
 def main():
     load_dotenv()
-    url_xkcd = 'https://xkcd.com/info.0.json'
+    xkcd_url = 'https://xkcd.com/info.0.json'
     tg_token = os.environ['TELEGRAM_TOKEN']
-    name_tg_channel = os.environ['NAME_TG_CHANNEL']
+    tg_channel_name = os.environ['TG_CHANNEL_NAME']
 
-    path = Path('./files/')
+    path = Path('temp_files')
     path.mkdir(parents=True, exist_ok=True)
+    try:
+        bot = telegram.Bot(token=tg_token)
+        updates = bot.get_updates()
+    
+        image = get_image_from_xkcd(xkcd_url)
+        image_link, image_title, image_coment, image_num = image
+        number_comics = random.randint(1, int(image_num))
+    
+        new_xkcd_url = f'https://xkcd.com/{number_comics}/info.0.json'
+        image = get_image_from_xkcd(new_xkcd_url)
+        image_link, image_title, image_coment, image_num = image
+        download_image(path, image_link, image_title)
+        send_image_with_tg_bot(path, image_title, bot, tg_channel_name)
+        bot.send_message(chat_id=tg_channel_name, text=f'{image_coment}')
+    finally:
+        shutil.rmtree(path)
+        print(f'Изображение "{image_title}" отправлено в тг-канал {tg_channel_name}\nВременные файлы удалены')
 
-    bot = telegram.Bot(token=tg_token)
-    updates = bot.get_updates()
-
-    while True:
-        try:
-            link_image = get_link_from_url(url_xkcd)
-            coment_image = get_coment_image(url_xkcd)
-            title_image = get_title_image(url_xkcd)
-            download_image(path, link_image, title_image)
-            send_image_with_tg_bot(path, title_image, bot, name_tg_channel)
-            bot.send_message(chat_id=name_tg_channel, text=f'{coment_image}')
-            time.sleep(86400)
-
-        except requests.exceptions.HTTPError as error:
-            print(f"Ошибка HTTP: {error}.")
-            bot.send_message(chat_id=name_tg_channel, text="Сайт xkcd сегодня не доступен :sad")
-            break
-  
 
 if __name__ == '__main__':
     main()

@@ -33,13 +33,6 @@ def send_image_with_tg_bot(path, image_title, bot, tg_channel_name):
             bot.send_document(tg_channel_name, document)
 
 
-def get_images_of_directory(file_path):
-    directory_structure = os.walk(Path)
-    for contents in directory_structure:
-        dirpath, dirnames, image = contents
-        return image
-
-
 def get_file_path(path, image_title):
     file_name = f'{image_title}.jpg'
     file_path = Path(path, file_name)
